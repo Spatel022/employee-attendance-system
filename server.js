@@ -96,9 +96,16 @@ app.get('/api/employee/leaves', auth('employee'), (req, res) => {
 app.get('/api/admin/dashboard', auth('admin'), (req, res) => {
   const data = loadData();
   const employees = data.employees.map(e => ({ id:e.id,name:e.name,email:e.email,active:e.active,created_at:e.created_at }));
-  const attendance = data.attendance.filter(a => a.date === day()).map(a => { const e=data.employees.find(x=>x.id===a.employee_id)||{}; return {...a,name:e.name||'Unknown',email:e.email||'',...calc(a)}; }).sort((a,b)=>a.name.localeCompare(b.name));
+  const today = day();
+  const attendance = data.attendance.filter(a => a.date === today).map(a => { const e=data.employees.find(x=>x.id===a.employee_id)||{}; return {...a,name:e.name||'Unknown',email:e.email||'',...calc(a)}; }).sort((a,b)=>a.name.localeCompare(b.name));
+  const todayLeaveIds = new Set(data.leaves.filter(l => l.status === 'approved' && l.start_date <= today && l.end_date >= today).map(l => l.employee_id));
+  const activeEmployees = employees.filter(e => e.active);
+  const workStartedIds = new Set(attendance.map(a => a.employee_id));
+  const workStarted = activeEmployees.filter(e => workStartedIds.has(e.id)).length;
+  const onLeave = activeEmployees.filter(e => todayLeaveIds.has(e.id)).length;
+  const remaining = Math.max(0, activeEmployees.length - workStarted - onLeave);
   const leaves = data.leaves.filter(l => l.status === 'pending').map(l => { const e=data.employees.find(x=>x.id===l.employee_id)||{}; return {...l,employee_name:e.name||'Unknown',employee_email:e.email||''}; }).sort((a,b)=>b.created_at.localeCompare(a.created_at));
-  res.json({ employees, attendance, pending_leaves: leaves, date: day() });
+  res.json({ employees, attendance, pending_leaves: leaves, date: today, stats: { total_employees: activeEmployees.length, work_started: workStarted, remaining, on_leave: onLeave } });
 });
 app.post('/api/admin/employees', auth('admin'), (req,res)=>{ const data=loadData(); const name=String(req.body.name||'').trim(); const email=String(req.body.email||'').trim().toLowerCase(); const password=String(req.body.password||''); if(!name||!email||!password)return res.status(400).json({error:'All fields required'}); if(data.employees.some(e=>e.email===email))return res.status(400).json({error:'Email already exists'}); const e={id:nextId(data.employees),name,email,password,active:true,created_at:iso()};data.employees.push(e);saveData(data);res.json({id:e.id}); });
 app.patch('/api/admin/employees/:id', auth('admin'), (req,res)=>{ const data=loadData(); const e=data.employees.find(x=>x.id===Number(req.params.id)); if(!e)return res.sendStatus(404); const email=String(req.body.email??e.email).trim().toLowerCase(); if(data.employees.some(x=>x.id!==e.id&&x.email===email))return res.status(400).json({error:'Email already exists'}); e.name=String(req.body.name??e.name).trim();e.email=email;if(req.body.password)e.password=String(req.body.password);if(req.body.active!==undefined)e.active=!!req.body.active;saveData(data);res.json({ok:true}); });

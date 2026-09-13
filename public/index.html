@@ -1,1 +1,89 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Attendance System</title><link rel="stylesheet" href="/style.css"></head><body><main class="shell" style="max-width:760px;padding-top:80px"><section class="card center"><span class="eyebrow">OFFICE ATTENDANCE</span><h1>Welcome</h1><p class="muted">Secure attendance management for employees and administrators.</p><div style="max-width:420px;margin:25px auto;text-align:left"><label>Login as</label><select id="lr"><option value="employee">Employee</option><option value="admin">Administrator</option></select><label style="margin-top:12px">Email</label><input id="email" placeholder="Email"><label style="margin-top:12px">Password</label><input id="pass" type="password" placeholder="Password"><button onclick="doLogin()" style="width:100%;margin-top:16px">Login</button></div><p class="muted" style="font-size:12px">One administrator account is supported.</p></section></main><script>async function doLogin(){try{const role=document.getElementById('lr').value;const r=await fetch('/api/'+(role==='admin'?'admin':'employee')+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value,password:pass.value})});const j=await r.json();if(!r.ok)throw Error(j.error||'Login failed');localStorage.token=j.token;localStorage.role=role;location.href=role==='admin'?'/admin':'/employee'}catch(e){alert(e.message)}}</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0f2742">
+  <title>Linn Point Attendance System</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:#142235;background:#f4f7fb}.login-wrap{min-height:100vh;display:grid;grid-template-columns:1.08fr .92fr;overflow:hidden}.login-brand{background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.08),transparent 28%),linear-gradient(145deg,#0c2035,#153957 55%,#1b4b70);color:#fff;display:flex;align-items:center;padding:60px 8%;position:relative;overflow:hidden}.login-brand:before{content:"";position:absolute;width:350px;height:350px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-120px;top:-100px}.login-brand-inner{width:100%;max-width:560px;position:relative;z-index:2}.company-logo-box{width:220px;min-height:82px;background:rgba(255,255,255,.97);border-radius:16px;padding:14px 20px;display:flex;align-items:center;margin-bottom:38px;box-shadow:0 18px 45px rgba(0,0,0,.18)}.company-logo{width:100%;height:auto;max-height:68px;object-fit:contain}.eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#9fc8e8;margin-bottom:10px}.login-brand h1{font-size:clamp(40px,5vw,68px);line-height:1.02;letter-spacing:-2.5px;margin:0 0 22px;font-weight:800}.login-brand p{color:#d3e2ee;max-width:520px;font-size:16px;line-height:1.75;margin:0}.feature-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.feature{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);padding:10px 13px;border-radius:10px;font-size:12px;font-weight:600;color:#eef7ff}.brand-footer{margin-top:42px;font-size:12px;color:#a9c1d4}.login-panel{display:flex;align-items:center;justify-content:center;padding:35px;background:#f7f9fc}.login-card{width:min(460px,100%);background:#fff;border:1px solid #e5ebf2;border-radius:22px;padding:34px;box-shadow:0 25px 70px rgba(15,39,66,.1),0 5px 18px rgba(15,39,66,.04)}.login-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.mini-logo{width:52px;height:52px;border-radius:14px;background:#f5f8fb;border:1px solid #e4eaf0;display:flex;align-items:center;justify-content:center;overflow:hidden}.mini-logo img{width:84%;height:84%;object-fit:contain}.secure-pill{background:#edf8f2;color:#197044;border:1px solid #d4efdf;border-radius:999px;font-size:11px;font-weight:700;padding:7px 11px}.login-card h2{margin:5px 0 8px;font-size:29px;line-height:1.15;letter-spacing:-.8px;color:#13263b}.muted{color:#718096;font-size:14px;line-height:1.6;margin:0 0 26px}.field{margin-bottom:17px}.field label{display:block;margin-bottom:7px;color:#334155;font-size:12px;font-weight:700}.field input,.field select{width:100%;height:48px;border:1px solid #d5dde7;border-radius:11px;padding:0 14px;font-size:14px;color:#142235;background:#fff;outline:none;transition:.2s}.field input:focus,.field select:focus{border-color:#2d78b7;box-shadow:0 0 0 4px rgba(45,120,183,.1)}.login-button{width:100%;height:50px;border:0;border-radius:11px;background:linear-gradient(135deg,#123e63,#1f6797);color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:5px;transition:.2s;box-shadow:0 10px 22px rgba(24,82,125,.22)}.login-button:hover{transform:translateY(-1px)}.login-button:disabled{opacity:.65;cursor:not-allowed;transform:none}.login-error{min-height:19px;color:#c53030;font-size:12px;margin:11px 0 0;text-align:center}.login-note{border-top:1px solid #edf0f4;margin-top:20px;padding-top:17px;color:#8793a0;font-size:11px;line-height:1.6;text-align:center}@media(max-width:900px){.login-wrap{grid-template-columns:1fr}.login-brand{padding:42px 28px}.login-brand h1{font-size:43px}.login-panel{padding:25px 18px 45px}}@media(max-width:520px){.login-brand{padding:30px 20px 35px}.company-logo-box{width:175px;min-height:68px;margin-bottom:25px;padding:10px 16px}.login-brand h1{font-size:36px;letter-spacing:-1.5px}.login-brand p{font-size:14px}.feature{font-size:11px}.login-card{padding:24px 20px;border-radius:18px}.login-card h2{font-size:25px}}
+  </style>
+</head>
+<body>
+  <main class="login-wrap">
+    <section class="login-brand">
+      <div class="login-brand-inner">
+        <div class="company-logo-box">
+          <img class="company-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
+        </div>
+        <span class="eyebrow">LINN POINT</span>
+        <h1>Attendance<br>System</h1>
+        <p>A simple and secure platform for managing employee attendance, working hours, lunch breaks and leave requests.</p>
+        <div class="feature-row">
+          <span class="feature">✓ Easy Check-in</span>
+          <span class="feature">✓ Lunch Tracking</span>
+          <span class="feature">✓ Working Hours</span>
+          <span class="feature">✓ Leave Management</span>
+        </div>
+        <div class="brand-footer">Linn Point • Employee &amp; Administrator Portal</div>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-card">
+        <div class="login-card-top">
+          <div class="mini-logo"><img src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"></div>
+          <span class="secure-pill">🔒 Secure Login</span>
+        </div>
+        <span class="eyebrow">WELCOME BACK</span>
+        <h2>Sign in to Linn Point</h2>
+        <p class="muted">Use your registered email and password to continue.</p>
+
+        <div class="field">
+          <label for="lr">Login as</label>
+          <select id="lr">
+            <option value="employee">Employee</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" type="email" autocomplete="username" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="pass">Password</label>
+          <input id="pass" type="password" autocomplete="current-password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+
+        <button class="login-button" id="loginBtn" onclick="doLogin()">Sign In</button>
+        <p id="loginError" class="login-error" aria-live="polite"></p>
+        <div class="login-note">Your attendance records are securely managed by Linn Point.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function doLogin(){
+      const role=document.getElementById('lr').value;
+      const email=document.getElementById('email').value.trim();
+      const password=document.getElementById('pass').value;
+      const error=document.getElementById('loginError');
+      const button=document.getElementById('loginBtn');
+      error.textContent='';
+      if(!email||!password){error.textContent='Please enter your email and password.';return;}
+      button.disabled=true;button.textContent='Signing in...';
+      try{
+        const endpoint=role==='admin'?'/api/admin/login':'/api/employee/login';
+        const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+        const data=await response.json();
+        if(!response.ok)throw new Error(data.error||'Login failed');
+        localStorage.token=data.token;
+        localStorage.role=role;
+        window.location.href=role==='admin'?'/admin':'/employee';
+      }catch(err){error.textContent=err.message;}
+      finally{button.disabled=false;button.textContent='Sign In';}
+    }
+  </script>
+</body>
+</html>

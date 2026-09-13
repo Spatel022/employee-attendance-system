@@ -3,20 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0f2742">
+  <meta name="theme-color" content="#102f4d">
   <title>Linn Point Attendance System</title>
-  <link rel="stylesheet" href="/style.css">
   <style>
-    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:#142235;background:#f4f7fb}.login-wrap{min-height:100vh;display:grid;grid-template-columns:1.08fr .92fr;overflow:hidden}.login-brand{background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.08),transparent 28%),linear-gradient(145deg,#0c2035,#153957 55%,#1b4b70);color:#fff;display:flex;align-items:center;padding:60px 8%;position:relative;overflow:hidden}.login-brand:before{content:"";position:absolute;width:350px;height:350px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-120px;top:-100px}.login-brand-inner{width:100%;max-width:560px;position:relative;z-index:2}.company-logo-box{width:220px;min-height:82px;background:rgba(255,255,255,.97);border-radius:16px;padding:14px 20px;display:flex;align-items:center;margin-bottom:38px;box-shadow:0 18px 45px rgba(0,0,0,.18)}.company-logo{width:100%;height:auto;max-height:68px;object-fit:contain}.eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#9fc8e8;margin-bottom:10px}.login-brand h1{font-size:clamp(40px,5vw,68px);line-height:1.02;letter-spacing:-2.5px;margin:0 0 22px;font-weight:800}.login-brand p{color:#d3e2ee;max-width:520px;font-size:16px;line-height:1.75;margin:0}.feature-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.feature{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);padding:10px 13px;border-radius:10px;font-size:12px;font-weight:600;color:#eef7ff}.brand-footer{margin-top:42px;font-size:12px;color:#a9c1d4}.login-panel{display:flex;align-items:center;justify-content:center;padding:35px;background:#f7f9fc}.login-card{width:min(460px,100%);background:#fff;border:1px solid #e5ebf2;border-radius:22px;padding:34px;box-shadow:0 25px 70px rgba(15,39,66,.1),0 5px 18px rgba(15,39,66,.04)}.login-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.mini-logo{width:52px;height:52px;border-radius:14px;background:#f5f8fb;border:1px solid #e4eaf0;display:flex;align-items:center;justify-content:center;overflow:hidden}.mini-logo img{width:84%;height:84%;object-fit:contain}.secure-pill{background:#edf8f2;color:#197044;border:1px solid #d4efdf;border-radius:999px;font-size:11px;font-weight:700;padding:7px 11px}.login-card h2{margin:5px 0 8px;font-size:29px;line-height:1.15;letter-spacing:-.8px;color:#13263b}.muted{color:#718096;font-size:14px;line-height:1.6;margin:0 0 26px}.field{margin-bottom:17px}.field label{display:block;margin-bottom:7px;color:#334155;font-size:12px;font-weight:700}.field input,.field select{width:100%;height:48px;border:1px solid #d5dde7;border-radius:11px;padding:0 14px;font-size:14px;color:#142235;background:#fff;outline:none;transition:.2s}.field input:focus,.field select:focus{border-color:#2d78b7;box-shadow:0 0 0 4px rgba(45,120,183,.1)}.login-button{width:100%;height:50px;border:0;border-radius:11px;background:linear-gradient(135deg,#123e63,#1f6797);color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:5px;transition:.2s;box-shadow:0 10px 22px rgba(24,82,125,.22)}.login-button:hover{transform:translateY(-1px)}.login-button:disabled{opacity:.65;cursor:not-allowed;transform:none}.login-error{min-height:19px;color:#c53030;font-size:12px;margin:11px 0 0;text-align:center}.login-note{border-top:1px solid #edf0f4;margin-top:20px;padding-top:17px;color:#8793a0;font-size:11px;line-height:1.6;text-align:center}@media(max-width:900px){.login-wrap{grid-template-columns:1fr}.login-brand{padding:42px 28px}.login-brand h1{font-size:43px}.login-panel{padding:25px 18px 45px}}@media(max-width:520px){.login-brand{padding:30px 20px 35px}.company-logo-box{width:175px;min-height:68px;margin-bottom:25px;padding:10px 16px}.login-brand h1{font-size:36px;letter-spacing:-1.5px}.login-brand p{font-size:14px}.feature{font-size:11px}.login-card{padding:24px 20px;border-radius:18px}.login-card h2{font-size:25px}}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%}body{font-family:Inter,Arial,sans-serif;color:#142235;background:#fff}
+    .login-wrap{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;background:#fff}
+    .login-brand{min-height:100vh;display:flex;align-items:center;padding:70px 8%;position:relative;overflow:hidden;background:radial-gradient(circle at 15% 15%,rgba(55,130,185,.13),transparent 30%),radial-gradient(circle at 90% 90%,rgba(55,130,185,.08),transparent 28%),linear-gradient(135deg,#edf6fb 0%,#f8fbfd 55%,#eaf3f8 100%)}
+    .login-brand:before{content:"";position:absolute;width:480px;height:480px;border:1px solid rgba(45,120,183,.10);border-radius:50%;right:-240px;top:-160px}.login-brand:after{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(45,120,183,.08);border-radius:50%;left:-180px;bottom:-170px}
+    .login-brand-inner{width:100%;max-width:650px;position:relative;z-index:2}.company-logo{display:block;width:430px;max-width:95%;height:auto;margin-top:-30px;margin-bottom:42px;object-fit:contain}.eyebrow{display:inline-block;color:#2b76ad;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}.login-brand h1{margin:0 0 22px;color:#142235;font-size:clamp(44px,5vw,70px);line-height:1.02;letter-spacing:-2.8px;font-weight:800}.login-brand p{max-width:550px;margin:0;color:#68788a;font-size:17px;line-height:1.75}.feature-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.feature{padding:10px 13px;background:rgba(255,255,255,.72);border:1px solid #e7edf3;border-radius:10px;color:#455568;font-size:12px;font-weight:700;backdrop-filter:blur(3px)}.brand-footer{margin-top:42px;color:#98a4b0;font-size:12px}
+    .login-panel{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:50px;background:radial-gradient(circle at 15% 15%,rgba(93,170,221,.22),transparent 28%),radial-gradient(circle at 90% 85%,rgba(255,255,255,.10),transparent 25%),linear-gradient(145deg,#0c243b 0%,#123e60 48%,#1c6691 100%)}.login-panel:before{content:"";position:absolute;width:430px;height:430px;border-radius:50%;border:1px solid rgba(255,255,255,.09);top:-180px;right:-160px}.login-panel:after{content:"";position:absolute;width:320px;height:320px;border-radius:50%;border:1px solid rgba(255,255,255,.07);bottom:-170px;left:-150px}.login-content{width:100%;max-width:470px;position:relative;z-index:5}.login-heading{text-align:center;color:#fff;margin-bottom:25px}.login-heading .top-label{display:inline-block;margin-bottom:10px;padding:7px 12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:999px;color:#d9efff;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.login-heading h2{margin:0;font-size:32px;line-height:1.15;letter-spacing:-1px;font-weight:800}.login-heading p{margin:10px 0 0;color:#c3d8e8;font-size:13px;line-height:1.6}
+    .login-card{width:100%;background:#fff;border-radius:24px;padding:34px;border:1px solid rgba(255,255,255,.25);box-shadow:0 35px 90px rgba(0,0,0,.25),0 10px 30px rgba(0,0,0,.10)}.login-card-head{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:27px}.mini-logo{width:150px;height:50px;display:flex;align-items:center;justify-content:center;overflow:hidden}.mini-logo img{display:block;width:100%;height:auto;object-fit:contain}.secure-pill{display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:999px;background:#edf8f2;border:1px solid #d4efdf;color:#197044;font-size:10px;font-weight:800}.login-welcome{text-align:center;margin-bottom:23px}.login-welcome .eyebrow{margin-bottom:7px;color:#2d78b7}.login-welcome h3{margin:0;color:#13263b;font-size:27px;line-height:1.15;letter-spacing:-.8px;font-weight:800}.login-welcome p{margin:8px 0 0;color:#718096;font-size:13px;line-height:1.6}
+    .field{margin-bottom:17px}.field label{display:block;margin-bottom:7px;color:#344054;font-size:11px;font-weight:800}.field-wrap{position:relative}.field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#8796a5;font-size:14px;pointer-events:none}.field input,.field select{width:100%;height:49px;border:1px solid #d5dde7;border-radius:11px;padding:0 14px;font-family:inherit;font-size:13px;color:#142235;background:#fff;outline:none;transition:.2s}.field-icon + input,.field-icon + select{padding-left:40px}.field input:focus,.field select:focus{border-color:#2d78b7;box-shadow:0 0 0 4px rgba(45,120,183,.1)}
+    .login-button{width:100%;height:51px;border:0;border-radius:11px;background:linear-gradient(135deg,#123e63,#236f9f);color:#fff;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;margin-top:4px;box-shadow:0 12px 25px rgba(25,91,137,.25);transition:transform .2s,box-shadow .2s,opacity .2s}.login-button:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(25,91,137,.30)}.login-button:disabled{opacity:.65;cursor:not-allowed;transform:none}.login-error{min-height:19px;margin:10px 0 0;color:#c53030;font-size:11px;text-align:center}.login-footer{margin-top:20px;padding-top:17px;border-top:1px solid #edf0f4;text-align:center;color:#8793a0;font-size:10px;line-height:1.6}
+    @media(max-width:1000px){.login-wrap{grid-template-columns:1fr}.login-brand{min-height:auto;padding:55px 35px 45px}.login-brand-inner{max-width:760px}.company-logo{width:350px;margin-top:-15px;margin-bottom:35px}.login-brand h1{font-size:52px}.login-panel{min-height:auto;padding:50px 30px 65px}}
+    @media(max-width:520px){.login-brand{padding:35px 20px 40px}.company-logo{width:290px;max-width:100%;margin-top:-10px;margin-bottom:30px}.login-brand h1{font-size:38px;letter-spacing:-1.7px}.login-brand p{font-size:14px}.feature{font-size:11px}.login-panel{padding:30px 16px 40px}.login-heading h2{font-size:27px}.login-card{padding:24px 20px;border-radius:19px}.login-welcome h3{font-size:24px}.login-card-head{gap:12px}.mini-logo{width:125px;height:42px}.secure-pill{font-size:9px;padding:6px 9px}}
   </style>
 </head>
 <body>
   <main class="login-wrap">
     <section class="login-brand">
       <div class="login-brand-inner">
-        <div class="company-logo-box">
-          <img class="company-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
-        </div>
+        <img class="company-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
         <span class="eyebrow">LINN POINT</span>
         <h1>Attendance<br>System</h1>
         <p>A simple and secure platform for managing employee attendance, working hours, lunch breaks and leave requests.</p>
@@ -29,40 +36,42 @@
         <div class="brand-footer">Linn Point • Employee &amp; Administrator Portal</div>
       </div>
     </section>
-
     <section class="login-panel">
-      <div class="login-card">
-        <div class="login-card-top">
-          <div class="mini-logo"><img src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"></div>
-          <span class="secure-pill">🔒 Secure Login</span>
+      <div class="login-content">
+        <div class="login-heading">
+          <span class="top-label">LINN POINT ATTENDANCE</span>
+          <h2>Welcome Back</h2>
+          <p>Sign in to access your attendance portal</p>
         </div>
-        <span class="eyebrow">WELCOME BACK</span>
-        <h2>Sign in to Linn Point</h2>
-        <p class="muted">Use your registered email and password to continue.</p>
-
-        <div class="field">
-          <label for="lr">Login as</label>
-          <select id="lr">
-            <option value="employee">Employee</option>
-            <option value="admin">Administrator</option>
-          </select>
+        <div class="login-card">
+          <div class="login-card-head">
+            <div class="mini-logo"><img src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"></div>
+            <span class="secure-pill">🔒 Secure Login</span>
+          </div>
+          <div class="login-welcome">
+            <span class="eyebrow">SIGN IN</span>
+            <h3>Access your account</h3>
+            <p>Use your registered email and password to continue.</p>
+          </div>
+          <div class="field">
+            <label for="lr">Login as</label>
+            <div class="field-wrap"><span class="field-icon">👤</span><select id="lr"><option value="employee">Employee</option><option value="admin">Administrator</option></select></div>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <div class="field-wrap"><span class="field-icon">✉</span><input id="email" type="email" autocomplete="username" placeholder="you@example.com"></div>
+          </div>
+          <div class="field">
+            <label for="pass">Password</label>
+            <div class="field-wrap"><span class="field-icon">🔑</span><input id="pass" type="password" autocomplete="current-password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+          </div>
+          <button class="login-button" id="loginBtn" onclick="doLogin()">Sign In</button>
+          <p id="loginError" class="login-error" aria-live="polite"></p>
+          <div class="login-footer">Your attendance records are securely managed by Linn Point.</div>
         </div>
-        <div class="field">
-          <label for="email">Email address</label>
-          <input id="email" type="email" autocomplete="username" placeholder="you@example.com">
-        </div>
-        <div class="field">
-          <label for="pass">Password</label>
-          <input id="pass" type="password" autocomplete="current-password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()">
-        </div>
-
-        <button class="login-button" id="loginBtn" onclick="doLogin()">Sign In</button>
-        <p id="loginError" class="login-error" aria-live="polite"></p>
-        <div class="login-note">Your attendance records are securely managed by Linn Point.</div>
       </div>
     </section>
   </main>
-
   <script>
     async function doLogin(){
       const role=document.getElementById('lr').value;
@@ -81,8 +90,7 @@
         localStorage.token=data.token;
         localStorage.role=role;
         window.location.href=role==='admin'?'/admin':'/employee';
-      }catch(err){error.textContent=err.message;}
-      finally{button.disabled=false;button.textContent='Sign In';}
+      }catch(err){error.textContent=err.message;}finally{button.disabled=false;button.textContent='Sign In';}
     }
   </script>
 </body>

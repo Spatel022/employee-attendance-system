@@ -1,1 +1,72 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linn Point Employee Portal</title><link rel="stylesheet" href="/style.css"><style>.employee-brand{display:flex;align-items:center;gap:18px}.employee-logo{width:150px;height:auto;object-fit:contain}.portal-header{display:flex;align-items:center;justify-content:space-between;gap:20px}.portal-title{display:flex;align-items:center;gap:18px}.card{transition:.2s}.card:hover{box-shadow:0 12px 30px rgba(15,39,66,.07)}.action-row{display:flex;flex-wrap:wrap;gap:10px}@media(max-width:700px){.portal-header{align-items:flex-start}.employee-logo{width:115px}.portal-title{align-items:flex-start;gap:12px}}</style></head><body><main class="shell"><header class="top portal-header"><div class="portal-title"><img class="employee-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"><div><span class="eyebrow">EMPLOYEE PORTAL</span><h1>My Attendance</h1><p id="today" class="muted"></p></div></div><button class="ghost" onclick="logout()">Logout</button></header><section id="app"></section><section class="card"><div class="row"><div><h2>Leave application</h2><p class="muted">Request full-day or half-day leave. Admin approval is required.</p></div></div><div class="formgrid"><div><label>Leave type</label><select id="leaveType" onchange="toggleLeaveType()"><option value="full">Full Day</option><option value="half">Half Day</option></select></div><div><label>Start date</label><input id="leaveStart" type="date"></div><div id="endDateBox"><label>End date</label><input id="leaveEnd" type="date"></div><div id="halfDayBox" style="display:none"><label>Half day</label><select id="halfDay"><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></div><div><label>Reason</label><input id="leaveReason" placeholder="Reason for leave"></div></div><button onclick="submitLeave()" style="margin-top:12px">Submit Leave Request</button></section><section class="card"><h2>My leave requests</h2><div id="leaves" class="tablewrap"></div></section></main><script src="/common.js"></script><script>if(!token||role!=='employee')location.href='/';async function load(){try{const a=await api('/employee/today');today.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});app.innerHTML=a?`<section class="stats"><div class="stat"><small>Check-in</small><strong>${time(a.check_in)}</strong></div><div class="stat"><small>Office duration</small><strong>${fmt(a.office_minutes)}</strong></div><div class="stat"><small>Lunch</small><strong>${fmt(a.lunch_minutes)}</strong></div><div class="stat"><small>Working</small><strong>${fmt(a.working_minutes)}</strong></div><div class="stat"><small>Overtime</small><strong class="accent">${fmt(a.overtime_minutes)}</strong></div></section><section class="card"><div class="row"><div><h2>Today's status</h2><p class="muted">Your check-in time is locked and cannot be changed.</p></div><span class="badge ${a.check_out?'done':'live'}">${a.check_out?'Completed':'Active'}</span></div><div class="timeline"><div><span>Check-in</span><b>${time(a.check_in)}</b></div><div><span>Lunch start</span><b>${a.lunch_start?time(a.lunch_start):'—'}</b></div><div><span>Lunch end</span><b>${a.lunch_end?time(a.lunch_end):'—'}</b></div><div><span>Check-out</span><b>${a.check_out?time(a.check_out):'—'}</b></div></div><div class="actions">${!a.lunch_start&&!a.check_out?'<button onclick="act(\'lunch-start\')">Start Lunch</button>':''}${a.lunch_start&&!a.lunch_end&&!a.check_out?'<button onclick="act(\'lunch-end\')">End Lunch</button>':''}${!a.check_out?'<button class="danger" onclick="act(\'check-out\')">Check Out</button>':''}</div></section>`:`<section class="card center"><div class="bigicon">✓</div><h2>Ready to start?</h2><p class="muted">Check in when you actually arrive at the office.</p><button onclick="act('check-in')">Check In</button></section>`;loadLeaves()}catch(e){logout()}}async function act(x){try{await api('/employee/'+x,{method:'POST'});load()}catch(e){alert(e.message)}}function toggleLeaveType(){const half=leaveType.value==='half';halfDayBox.style.display=half?'block':'none';endDateBox.style.display=half?'none':'block';if(half)leaveEnd.value=leaveStart.value}async function submitLeave(){try{const type=leaveType.value;const start=leaveStart.value;const end=type==='half'?start:leaveEnd.value;if(!start||!end||!leaveReason.value.trim())return alert('Please enter date and reason');await api('/employee/leave-request',{method:'POST',body:JSON.stringify({type,start_date:start,end_date:end,half_day:halfDay.value,reason:leaveReason.value.trim()})});leaveReason.value='';alert('Leave request submitted');loadLeaves()}catch(e){alert(e.message)}}async function loadLeaves(){try{const data=await api('/employee/leaves');leaves.innerHTML=data.length?'<table><thead><tr><th>Date</th><th>Type</th><th>Reason</th><th>Status</th><th>Admin note</th></tr></thead><tbody>'+data.map(l=>`<tr><td>${l.start_date}${l.end_date!==l.start_date?' → '+l.end_date:''}</td><td>${l.type==='half'?'Half Day ('+l.half_day+')':'Full Day'}</td><td>${esc(l.reason)}</td><td>${l.status}</td><td>${esc(l.admin_note||'—')}</td></tr>`).join('')+'</tbody></table>':'<div class="empty">No leave requests yet.</div>'}catch(e){}}function esc(x){return String(x).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}load();setInterval(load,30000)</script></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linn Point Employee Portal</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+.employee-logo{width:150px;height:auto;object-fit:contain}
+.brand img{width:170px;height:auto;max-height:42px;object-fit:contain;filter:brightness(0) invert(1)}
+.portal-header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.portal-title{display:flex;align-items:center;gap:18px}
+.card{transition:.2s}
+.card:hover{transform:translateY(-1px)}
+@media(max-width:760px){.portal-header{align-items:flex-start}.employee-logo{width:115px}.portal-title{align-items:flex-start;gap:12px}.brand img{width:150px}}
+</style>
+</head>
+<body>
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><img src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"></div>
+  <nav class="nav">
+    <a href="#todaySection" class="active">🕒 <span>My Attendance</span></a>
+    <a href="#leaveSection">📅 <span>Leave Application</span></a>
+    <a href="#leaveHistory">📋 <span>My Leave Requests</span></a>
+  </nav>
+  <div class="side-bottom">
+    <div class="user-mini"><strong>Employee Portal</strong><span>Attendance & leave</span></div>
+    <button class="logout-link" onclick="logout()">↪ Logout</button>
+  </div>
+</aside>
+<main class="content">
+<div class="content-inner">
+<header class="page-head portal-header">
+  <div class="portal-title">
+    <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+    <img class="employee-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
+    <div><span class="eyebrow">LINN POINT · EMPLOYEE PORTAL</span><h1>My Attendance</h1><p id="today" class="muted"></p></div>
+  </div>
+  <div class="head-actions"><button class="ghost" onclick="load()">Refresh</button></div>
+</header>
+<section id="todaySection"><div id="app"></div></section>
+<section class="card" id="leaveSection">
+  <div class="section-head"><div><h2>Leave application</h2><p>Request full-day or half-day leave. Admin approval is required.</p></div></div>
+  <div class="formgrid">
+    <div class="field"><label>Leave type</label><select id="leaveType" onchange="toggleLeaveType()"><option value="full">Full Day</option><option value="half">Half Day</option></select></div>
+    <div class="field"><label>Start date</label><input id="leaveStart" type="date"></div>
+    <div class="field" id="endDateBox"><label>End date</label><input id="leaveEnd" type="date"></div>
+    <div class="field" id="halfDayBox" style="display:none"><label>Half day</label><select id="halfDay"><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></div>
+    <div class="field full"><label>Reason</label><input id="leaveReason" placeholder="Reason for leave"></div>
+  </div>
+  <div class="form-actions"><button onclick="submitLeave()">Submit Leave Request</button></div>
+</section>
+<section class="card" id="leaveHistory"><div class="section-head"><div><h2>My leave requests</h2><p>Track your submitted leave applications and admin notes.</p></div></div><div id="leaves" class="tablewrap"></div></section>
+</div></main></div>
+<script src="/common.js"></script>
+<script>
+if(!token||role!=='employee')location.href='/';
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
+async function load(){try{
+ const a=await api('/employee/today');
+ today.textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+ app.innerHTML=a?`<section class="stats"><div class="stat"><span class="icon">🕒</span><small>Check-in</small><strong>${time(a.check_in)}</strong></div><div class="stat"><span class="icon">🏢</span><small>Office duration</small><strong>${fmt(a.office_minutes)}</strong></div><div class="stat"><span class="icon">☕</span><small>Lunch</small><strong>${fmt(a.lunch_minutes)}</strong></div><div class="stat"><span class="icon">⏱️</span><small>Working</small><strong>${fmt(a.working_minutes)}</strong></div><div class="stat"><span class="icon">⚡</span><small>Overtime</small><strong class="accent">${fmt(a.overtime_minutes)}</strong></div></section><section class="card"><div class="section-head"><div><h2>Today's status</h2><p>Your check-in time is locked and cannot be changed.</p></div><span class="badge ${a.check_out?'done':'live'}">${a.check_out?'Completed':'Active'}</span></div><div class="timeline"><div><span>Check-in</span><b>${time(a.check_in)}</b></div><div><span>Lunch start</span><b>${a.lunch_start?time(a.lunch_start):'—'}</b></div><div><span>Lunch end</span><b>${a.lunch_end?time(a.lunch_end):'—'}</b></div><div><span>Check-out</span><b>${a.check_out?time(a.check_out):'—'}</b></div></div><div class="actions">${!a.lunch_start&&!a.check_out?'<button onclick="act(\'lunch-start\')">Start Lunch</button>':''}${a.lunch_start&&!a.lunch_end&&!a.check_out?'<button onclick="act(\'lunch-end\')">End Lunch</button>':''}${!a.check_out?'<button class="danger" onclick="act(\'check-out\')">Check Out</button>':''}</div></section>`:`<section class="card center"><div class="bigicon">✓</div><h2>Ready to start?</h2><p class="muted">Check in when you actually arrive at the office.</p><button onclick="act('check-in')">Check In</button></section>`;
+ await loadLeaves();
+}catch(e){logout()}}
+async function act(x){try{await api('/employee/'+x,{method:'POST'});load()}catch(e){alert(e.message)}}
+function toggleLeaveType(){const half=leaveType.value==='half';halfDayBox.style.display=half?'block':'none';endDateBox.style.display=half?'none':'block';if(half)leaveEnd.value=leaveStart.value}
+async function submitLeave(){try{const type=leaveType.value;const start=leaveStart.value;const end=type==='half'?start:leaveEnd.value;if(!start||!end||!leaveReason.value.trim())return alert('Please enter date and reason');await api('/employee/leave-request',{method:'POST',body:JSON.stringify({type,start_date:start,end_date:end,half_day:halfDay.value,reason:leaveReason.value.trim()})});leaveReason.value='';alert('Leave request submitted');loadLeaves()}catch(e){alert(e.message)}}
+async function loadLeaves(){try{const data=await api('/employee/leaves');leaves.innerHTML=data.length?'<table><thead><tr><th>Date</th><th>Type</th><th>Reason</th><th>Status</th><th>Admin note</th></tr></thead><tbody>'+data.map(l=>`<tr><td>${l.start_date}${l.end_date!==l.start_date?' → '+l.end_date:''}</td><td>${l.type==='half'?'Half Day ('+l.half_day+')':'Full Day'}</td><td>${esc(l.reason)}</td><td><span class="badge ${l.status==='approved'?'approved':l.status==='rejected'?'rejected':'pending'}">${l.status}</span></td><td>${esc(l.admin_note||'—')}</td></tr>`).join('')+'</tbody></table>':'<div class="empty">No leave requests yet.</div>'}catch(e){}}
+function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+load();setInterval(load,30000);
+</script>
+</body></html>

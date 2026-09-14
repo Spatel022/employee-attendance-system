@@ -5,23 +5,20 @@
 <title>Linn Point Employee Portal</title>
 <link rel="stylesheet" href="/style.css">
 <style>
-/* Employee-only styling: scoped so it cannot affect the Admin portal */
-.employee-page .sidebar .brand{display:none}
-.employee-page .sidebar{padding-top:28px}
+.employee-page .sidebar .brand{display:none!important}
+.employee-page .sidebar{padding-top:22px}
+.employee-page .sidebar-logo{display:block;width:175px;height:auto;max-height:58px;object-fit:contain;margin:0 auto 28px}
+.employee-page .content-logo{display:none!important}
 .employee-page .page-head{align-items:flex-start}
-.employee-page .content-logo{display:block;width:150px;height:auto;max-height:48px;object-fit:contain;margin:0 0 14px 0}
-.employee-page .stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));}
-.employee-page .page-head>div:first-child{min-width:0}
-@media(max-width:760px){
-  .employee-page .content-logo{width:135px;max-height:44px}
-  .employee-page .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
+.employee-page .stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+@media(max-width:760px){.employee-page .sidebar-logo{width:150px}.employee-page .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:430px){.employee-page .stats{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="employee-page">
 <div class="app-layout">
 <aside class="sidebar" id="sidebar">
+  <img class="sidebar-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
   <nav class="nav">
     <a href="#todaySection" class="active">🕒 <span>My Attendance</span></a>
     <a href="#leaveSection">📅 <span>Leave Application</span></a>

@@ -5,12 +5,18 @@
 <title>Linn Point Employee Portal</title>
 <link rel="stylesheet" href="/style.css">
 <style>
-/* Employee-only styling: intentionally scoped so it cannot affect Admin portal */
+/* Employee-only styling: scoped so it cannot affect the Admin portal */
 .employee-page .sidebar .brand{display:none}
 .employee-page .sidebar{padding-top:28px}
-.employee-page .content-logo{width:170px;height:auto;max-height:55px;object-fit:contain}
-.employee-page .page-head{align-items:center}
-@media(max-width:760px){.employee-page .content-logo{width:145px}.employee-page .page-head{align-items:flex-start}}
+.employee-page .page-head{align-items:flex-start}
+.employee-page .content-logo{display:block;width:150px;height:auto;max-height:48px;object-fit:contain;margin:0 0 14px 0}
+.employee-page .stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));}
+.employee-page .page-head>div:first-child{min-width:0}
+@media(max-width:760px){
+  .employee-page .content-logo{width:135px;max-height:44px}
+  .employee-page .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:430px){.employee-page .stats{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="employee-page">

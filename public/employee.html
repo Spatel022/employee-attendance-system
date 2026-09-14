@@ -5,19 +5,17 @@
 <title>Linn Point Employee Portal</title>
 <link rel="stylesheet" href="/style.css">
 <style>
-.employee-logo{width:150px;height:auto;object-fit:contain}
-.brand img{width:170px;height:auto;max-height:42px;object-fit:contain;filter:brightness(0) invert(1)}
-.portal-header{display:flex;align-items:center;justify-content:space-between;gap:20px}
-.portal-title{display:flex;align-items:center;gap:18px}
-.card{transition:.2s}
-.card:hover{transform:translateY(-1px)}
-@media(max-width:760px){.portal-header{align-items:flex-start}.employee-logo{width:115px}.portal-title{align-items:flex-start;gap:12px}.brand img{width:150px}}
+/* Employee-only styling: intentionally scoped so it cannot affect Admin portal */
+.employee-page .sidebar .brand{display:none}
+.employee-page .sidebar{padding-top:28px}
+.employee-page .content-logo{width:170px;height:auto;max-height:55px;object-fit:contain}
+.employee-page .page-head{align-items:center}
+@media(max-width:760px){.employee-page .content-logo{width:145px}.employee-page .page-head{align-items:flex-start}}
 </style>
 </head>
-<body>
+<body class="employee-page">
 <div class="app-layout">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><img src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"></div>
   <nav class="nav">
     <a href="#todaySection" class="active">🕒 <span>My Attendance</span></a>
     <a href="#leaveSection">📅 <span>Leave Application</span></a>
@@ -30,11 +28,13 @@
 </aside>
 <main class="content">
 <div class="content-inner">
-<header class="page-head portal-header">
-  <div class="portal-title">
+<header class="page-head">
+  <div>
     <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
-    <img class="employee-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
-    <div><span class="eyebrow">LINN POINT · EMPLOYEE PORTAL</span><h1>My Attendance</h1><p id="today" class="muted"></p></div>
+    <img class="content-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
+    <span class="eyebrow">LINN POINT · EMPLOYEE PORTAL</span>
+    <h1>My Attendance</h1>
+    <p id="today" class="muted"></p>
   </div>
   <div class="head-actions"><button class="ghost" onclick="load()">Refresh</button></div>
 </header>

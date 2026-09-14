@@ -5,16 +5,17 @@
 <title>Linn Point Admin Portal</title>
 <link rel="stylesheet" href="/style.css">
 <style>
-.admin-logo{width:150px;height:auto;object-fit:contain;filter:brightness(0) invert(1)}
-.brand img{width:170px;height:auto;max-height:42px;object-fit:contain;filter:brightness(0) invert(1)}
-.sidebar .brand{min-height:55px}
-@media(max-width:760px){.brand img{width:150px}}
+/* Admin-only styling: intentionally scoped so it cannot affect Employee portal */
+.admin-page .sidebar .brand{display:none}
+.admin-page .sidebar{padding-top:28px}
+.admin-page .content-logo{width:170px;height:auto;max-height:55px;object-fit:contain}
+.admin-page .page-head{align-items:center}
+@media(max-width:760px){.admin-page .content-logo{width:145px}.admin-page .page-head{align-items:flex-start}}
 </style>
 </head>
-<body>
+<body class="admin-page">
 <div class="app-layout">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><img src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"></div>
   <nav class="nav">
     <a href="#dashboard" class="active">📊 <span>Dashboard</span></a>
     <a href="#employees">👥 <span>Employees</span></a>
@@ -31,6 +32,7 @@
 <header class="page-head" id="dashboard">
   <div>
     <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+    <img class="content-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
     <span class="eyebrow">LINN POINT · ADMIN PORTAL</span>
     <h1>Attendance Management</h1>
     <p id="sub">Live overview</p>

@@ -11,14 +11,14 @@
 <body class="portal-page">
 <div class="app-layout"><aside class="sidebar" id="sidebar">
 <img class="sidebar-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
-<nav class="nav"><a href="/employee">🕒 <span>My Attendance</span></a><a class="active" href="/employee-leave.html">📅 <span>Leave</span></a></nav>
-<div class="side-bottom"><div class="user-mini"><strong>Employee Portal</strong><span>Attendance & leave</span></div><button class="logout-link" onclick="logout()">↪ Logout</button></div>
+<nav class="nav"><a href="/employee.html">🕒 <span>My Attendance</span></a><a href="/employee-work-report.html">📝 <span>Work Report</span></a><a class="active" href="/employee-leave.html">📅 <span>Leave</span></a><a href="/employee-monthly.html">📈 <span>Monthly Summary</span></a><a href="/employee-history.html">📋 <span>Attendance History</span></a></nav>
+<div class="side-bottom"><div class="user-mini"><strong>Employee Portal</strong><span>Attendance & leave</span></div><button class="logout-link" type="button" onclick="logout()">↪ Logout</button></div>
 </aside><main class="content"><div class="content-inner">
-<header class="page-head"><div><button class="mobile-menu" onclick="toggleSidebar()">☰</button><span class="eyebrow">LINN POINT · EMPLOYEE PORTAL</span><h1>Leave Management</h1><p class="muted">Apply for leave and track your requests.</p></div></header>
+<header class="page-head"><div><button class="mobile-menu" type="button" onclick="toggleSidebar()">☰</button><span class="eyebrow">LINN POINT · EMPLOYEE PORTAL</span><h1>Leave Management</h1><p class="muted">Apply for leave and track your requests.</p></div></header>
 <section class="card"><div class="section-head"><div><h2>New leave request</h2><p>Submit a full-day or half-day request for admin approval.</p></div></div>
 <div class="formgrid"><div class="field"><label>Leave type</label><select id="leaveType" onchange="toggleType()"><option value="full">Full Day</option><option value="half">Half Day</option></select></div><div class="field"><label>Start date</label><input id="leaveStart" type="date"></div><div class="field" id="endBox"><label>End date</label><input id="leaveEnd" type="date"></div><div class="field" id="halfBox" style="display:none"><label>Half day</label><select id="halfDay"><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></div><div class="field full"><label>Reason</label><textarea id="reason" rows="4" placeholder="Enter reason for leave"></textarea></div></div>
-<div class="form-actions"><button id="submitBtn" onclick="submitLeave()">Submit request</button></div></section>
-<section class="card"><div class="section-head"><div><h2>My leave requests</h2><p>Pending, approved and rejected requests are shown here.</p></div><button class="ghost" onclick="loadLeaves()">Refresh</button></div><div id="leaves" class="tablewrap"></div></section>
+<div class="form-actions"><button id="submitBtn" type="button" onclick="submitLeave()">Submit request</button></div></section>
+<section class="card"><div class="section-head"><div><h2>My leave requests</h2><p>Pending, approved and rejected requests are shown here.</p></div><button class="ghost" type="button" onclick="loadLeaves()">Refresh</button></div><div id="leaves" class="tablewrap"></div></section>
 </div></main></div>
 <script src="/common.js"></script><script>
 if(!token||role!=='employee')location.href='/';

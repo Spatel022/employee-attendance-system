@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linn Point · Leave</title><link rel="stylesheet" href="/style.css">
+<style>
+.portal-page .sidebar-logo{display:block;width:175px;max-height:58px;height:auto;object-fit:contain;margin:0 auto 28px}.portal-page .sidebar{padding-top:22px}.portal-page .content-logo{display:none!important}.portal-page .nav a.active{background:#dff3f5;color:#123b52}.portal-page .page-head{align-items:flex-start}
+@media(max-width:760px){.portal-page .sidebar-logo{width:150px}}
+</style>
+</head>
+<body class="portal-page">
+<div class="app-layout"><aside class="sidebar" id="sidebar">
+<img class="sidebar-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point">
+<nav class="nav"><a href="/employee">🕒 <span>My Attendance</span></a><a class="active" href="/employee-leave.html">📅 <span>Leave</span></a></nav>
+<div class="side-bottom"><div class="user-mini"><strong>Employee Portal</strong><span>Attendance & leave</span></div><button class="logout-link" onclick="logout()">↪ Logout</button></div>
+</aside><main class="content"><div class="content-inner">
+<header class="page-head"><div><button class="mobile-menu" onclick="toggleSidebar()">☰</button><span class="eyebrow">LINN POINT · EMPLOYEE PORTAL</span><h1>Leave Management</h1><p class="muted">Apply for leave and track your requests.</p></div></header>
+<section class="card"><div class="section-head"><div><h2>New leave request</h2><p>Submit a full-day or half-day request for admin approval.</p></div></div>
+<div class="formgrid"><div class="field"><label>Leave type</label><select id="leaveType" onchange="toggleType()"><option value="full">Full Day</option><option value="half">Half Day</option></select></div><div class="field"><label>Start date</label><input id="leaveStart" type="date"></div><div class="field" id="endBox"><label>End date</label><input id="leaveEnd" type="date"></div><div class="field" id="halfBox" style="display:none"><label>Half day</label><select id="halfDay"><option value="morning">Morning</option><option value="afternoon">Afternoon</option></select></div><div class="field full"><label>Reason</label><textarea id="reason" rows="4" placeholder="Enter reason for leave"></textarea></div></div>
+<div class="form-actions"><button id="submitBtn" onclick="submitLeave()">Submit request</button></div></section>
+<section class="card"><div class="section-head"><div><h2>My leave requests</h2><p>Pending, approved and rejected requests are shown here.</p></div><button class="ghost" onclick="loadLeaves()">Refresh</button></div><div id="leaves" class="tablewrap"></div></section>
+</div></main></div>
+<script src="/common.js"></script><script>
+if(!token||role!=='employee')location.href='/';
+function toggleSidebar(){sidebar.classList.toggle('open')}function toggleType(){const half=leaveType.value==='half';halfBox.style.display=half?'block':'none';endBox.style.display=half?'none':'block'}
+async function submitLeave(){const start=leaveStart.value;const type=leaveType.value;const end=type==='half'?start:leaveEnd.value;if(!start||!end||!reason.value.trim())return alert('Please enter the date and reason.');submitBtn.disabled=true;try{await api('/employee/leave-request',{method:'POST',body:JSON.stringify({type,start_date:start,end_date:end,half_day:halfDay.value,reason:reason.value.trim()})});reason.value='';alert('Leave request submitted.');loadLeaves()}catch(e){alert(e.message)}finally{submitBtn.disabled=false}}
+async function loadLeaves(){try{const data=await api('/employee/leaves');leaves.innerHTML=data.length?'<table><thead><tr><th>Date</th><th>Type</th><th>Reason</th><th>Status</th><th>Admin note</th></tr></thead><tbody>'+data.map(l=>`<tr><td>${l.start_date}${l.end_date!==l.start_date?' → '+l.end_date:''}</td><td>${l.type==='half'?'Half Day · '+l.half_day:'Full Day'}</td><td>${esc(l.reason)}</td><td><span class="badge ${l.status==='approved'?'approved':l.status==='rejected'?'rejected':'pending'}">${l.status}</span></td><td>${esc(l.admin_note||'—')}</td></tr>`).join('')+'</tbody></table>':'<div class="empty">No leave requests yet.</div>'}catch(e){alert(e.message)}}function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}loadLeaves();
+</script></body></html>

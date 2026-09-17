@@ -303,6 +303,27 @@ app.patch('/api/admin/employees/:id', auth('admin'), async (req,res)=>{
   } catch(e){if(e.code==='23505')return res.status(400).json({error:'Email already exists'});res.status(500).json({error:'Could not update employee'});}
 });
 
+app.delete('/api/admin/employees/:id', auth('admin'), async (req,res)=>{
+  try {
+    const id=Number(req.params.id);
+    if(!Number.isInteger(id)||id<=0)return res.status(400).json({error:'Invalid employee id'});
+    if(!PRODUCTION){
+      const data=loadLocal();
+      const index=data.employees.findIndex(e=>Number(e.id)===id);
+      if(index===-1)return res.sendStatus(404);
+      const deleted=data.employees[index];
+      data.employees.splice(index,1);
+      data.attendance=data.attendance.filter(a=>Number(a.employee_id)!==id);
+      data.leaves=data.leaves.filter(l=>Number(l.employee_id)!==id);
+      saveLocal(data);
+      return res.json({ok:true,deleted_employee:{id:deleted.id,name:deleted.name,email:deleted.email}});
+    }
+    const r=await pool.query('DELETE FROM employees WHERE id=$1 RETURNING id,name,email',[id]);
+    if(!r.rowCount)return res.sendStatus(404);
+    res.json({ok:true,deleted_employee:r.rows[0]});
+  } catch(e){res.status(500).json({error:'Could not delete employee'});}
+});
+
 function addDerivedRows(rows){return rows.map(a=>({...a,...calc(a)}));}
 
 app.get('/api/admin/attendance', auth('admin'), async (req,res)=>{

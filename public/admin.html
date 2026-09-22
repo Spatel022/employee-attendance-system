@@ -1,1 +1,1225 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linn Point · Admin Dashboard</title><link rel="stylesheet" href="/style.css"><style>.portal-page .sidebar-logo{display:block;width:175px;max-height:58px;height:auto;object-fit:contain;margin:0 auto 28px}.portal-page .sidebar{padding-top:22px}.portal-page .content-logo{display:none!important}.portal-page .nav a.active{background:#dff3f5;color:#123b52}.portal-page .page-head{align-items:flex-start}@media(max-width:760px){.portal-page .sidebar-logo{width:150px}}</style></head><body class="portal-page"><div class="app-layout"><aside class="sidebar" id="sidebar"><img class="sidebar-logo" src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp" alt="Linn Point"><nav class="nav"><a class="active" href="/admin.html">📊 <span>Dashboard</span></a><a href="/admin-employees.html">👥 <span>Employees</span></a><a href="/admin-work-report.html">📝 <span>Work Reports</span></a><a href="/admin-leaves.html">📅 <span>Leave Requests</span></a><a href="/admin-attendance.html">🕒 <span>Attendance</span></a><a href="/admin-monthly.html">📈 <span>Monthly Reports</span></a><a href="/admin-holidays.html">🏖️ <span>Holidays & CL</span></a></nav><div class="side-bottom"><div class="user-mini"><strong>Administrator</strong><span>Attendance management</span></div><button class="logout-link" type="button" onclick="logout()">↪ Logout</button></div></aside><main class="content"><div class="content-inner"><header class="page-head"><div><button class="mobile-menu" type="button" onclick="toggleSidebar()">☰</button><span class="eyebrow">LINN POINT · ADMIN PORTAL</span><h1>Dashboard</h1><p id="sub" class="muted">Live attendance overview</p></div><button class="ghost" type="button" onclick="load()">Refresh</button></header><section class="stats"><div class="stat"><span class="icon">👥</span><small>Total Employees</small><strong id="empCount">—</strong></div><div class="stat"><span class="icon">✅</span><small>Work Started Today</small><strong id="started">—</strong></div><div class="stat"><span class="icon">⏳</span><small>Not Started Today</small><strong id="remaining">—</strong></div><div class="stat"><span class="icon">🏖️</span><small>On Leave Today</small><strong id="onLeave">—</strong></div></section><section class="card"><div class="section-head"><div><h2>Not started today</h2><p>Employees who have not checked in and are not on approved leave.</p></div></div><div id="notStarted" class="tablewrap"></div></section><section class="card"><div class="section-head"><div><h2>Quick actions</h2><p>Manage the system from dedicated pages.</p></div></div><div class="actions"><a class="button" href="/admin-employees.html">Manage Employees</a><a class="button" href="/admin-work-report.html">Work Reports</a><a class="button" href="/admin-leaves.html">Review Leave Requests</a><a class="button" href="/admin-attendance.html">View Attendance</a><a class="button" href="/admin-monthly.html">Monthly Reports</a><a class="button" href="/admin-holidays.html">Holidays & CL</a></div></section></div></main></div><script src="/common.js"></script><script>if(!token||role!=='admin')location.href='/';function toggleSidebar(){sidebar.classList.toggle('open')}async function load(){try{const d=await api('/admin/dashboard');empCount.textContent=d.stats.total_employees;started.textContent=d.stats.work_started;remaining.textContent=d.stats.remaining;onLeave.textContent=d.stats.on_leave;sub.textContent='Live overview · '+new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});notStarted.innerHTML=d.not_started_employees.length?'<table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th></tr></thead><tbody>'+d.not_started_employees.map(e=>`<tr><td><strong>${esc(e.name)}</strong></td><td>${esc(e.email)}</td><td>${esc(e.phone)||'—'}</td><td><span class="badge notstarted">Not Started</span></td></tr>`).join('')+'</tbody></table>':'<div class="empty">Everyone has started work or is on approved leave today.</div>'}catch(e){alert(e.message)}}function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}load();setInterval(load,30000);</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Linn Point · Admin Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* =========================================================
+       LINN POINT — ADMIN DASHBOARD
+       Reference-style UI
+       Existing API/functionality preserved
+       ========================================================= */
+
+    .admin-dashboard {
+      background: #f5f8fc;
+    }
+
+    .admin-dashboard .content {
+      background: #f5f8fc;
+    }
+
+    /* Header */
+    .admin-dashboard .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .admin-dashboard .head-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-dashboard .date-chip {
+      background: #fff;
+      border: 1px solid #e5eaf1;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #475467;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Top statistics */
+    .admin-dashboard .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .admin-dashboard .stat-card {
+      position: relative;
+      min-height: 92px;
+      padding: 17px 18px;
+      background: #fff;
+      border: 1px solid #e7edf4;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, .04);
+    }
+
+    .admin-dashboard .stat-card small {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .admin-dashboard .stat-card strong {
+      color: #0f172a;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .admin-dashboard .stat-icon {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #eff6ff;
+    }
+
+    .admin-dashboard .green .stat-icon {
+      background: #ecfdf3;
+    }
+
+    .admin-dashboard .orange .stat-icon {
+      background: #fff7ed;
+    }
+
+    .admin-dashboard .red .stat-icon {
+      background: #fef2f2;
+    }
+
+    /* Main two-column section */
+    .admin-dashboard .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .admin-dashboard .dashboard-card {
+      background: #fff;
+      border: 1px solid #e7edf4;
+      border-radius: 15px;
+      padding: 18px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
+    }
+
+    .admin-dashboard .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .admin-dashboard .section-head h2 {
+      margin: 0 0 4px;
+      color: #101828;
+      font-size: 15px;
+    }
+
+    .admin-dashboard .section-head p {
+      margin: 0;
+      color: #98a2b3;
+      font-size: 11px;
+    }
+
+    .admin-dashboard .view-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* Attendance donut */
+    .admin-dashboard .attendance-box {
+      display: grid;
+      grid-template-columns: 155px 1fr;
+      align-items: center;
+      gap: 25px;
+      min-height: 185px;
+    }
+
+    .admin-dashboard .donut {
+      width: 140px;
+      height: 140px;
+      margin: auto;
+      position: relative;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          #16a34a 0 75%,
+          #ef4444 75% 91%,
+          #f59e0b 91% 100%
+        );
+    }
+
+    .admin-dashboard .donut::after {
+      content: "";
+      position: absolute;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .admin-dashboard .donut-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .admin-dashboard .donut-content strong {
+      display: block;
+      color: #101828;
+      font-size: 24px;
+    }
+
+    .admin-dashboard .donut-content span {
+      color: #667085;
+      font-size: 10px;
+    }
+
+    .admin-dashboard .legend {
+      display: grid;
+      gap: 14px;
+    }
+
+    .admin-dashboard .legend-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #475467;
+      font-size: 12px;
+    }
+
+    .admin-dashboard .legend-row strong {
+      color: #101828;
+    }
+
+    .admin-dashboard .dot {
+      width: 9px;
+      height: 9px;
+      display: inline-block;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+
+    .admin-dashboard .dot-present {
+      background: #16a34a;
+    }
+
+    .admin-dashboard .dot-absent {
+      background: #ef4444;
+    }
+
+    .admin-dashboard .dot-leave {
+      background: #f59e0b;
+    }
+
+    /* Leave list */
+    .admin-dashboard .leave-list {
+      display: grid;
+    }
+
+    .admin-dashboard .leave-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px 7px;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 11px;
+    }
+
+    .admin-dashboard .leave-row:last-child {
+      border-bottom: 0;
+    }
+
+    .admin-dashboard .leave-name {
+      color: #344054;
+      font-weight: 800;
+    }
+
+    .admin-dashboard .leave-type,
+    .admin-dashboard .leave-date {
+      color: #667085;
+    }
+
+    /* Employee status */
+    .admin-dashboard .status-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .admin-dashboard .status-box {
+      padding: 13px 10px;
+      text-align: center;
+      border: 1px solid #edf0f4;
+      border-radius: 11px;
+      background: #f8fafc;
+    }
+
+    .admin-dashboard .status-box strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #101828;
+      font-size: 20px;
+    }
+
+    .admin-dashboard .status-box span {
+      color: #667085;
+      font-size: 10px;
+    }
+
+    .admin-dashboard .status-present {
+      background: #ecfdf3;
+    }
+
+    .admin-dashboard .status-absent {
+      background: #fef2f2;
+    }
+
+    .admin-dashboard .status-leave {
+      background: #fff7ed;
+    }
+
+    .admin-dashboard .status-not {
+      background: #eff6ff;
+    }
+
+    /* Quick actions */
+    .admin-dashboard .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .admin-dashboard .quick-action {
+      display: block;
+      padding: 13px 10px;
+      border: 1px solid #e6ebf2;
+      border-radius: 11px;
+      background: #fff;
+      color: #344054;
+      text-align: center;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+
+    .admin-dashboard .quick-action:hover {
+      border-color: #bfdbfe;
+      background: #f8fbff;
+      transform: translateY(-1px);
+    }
+
+    .admin-dashboard .quick-action span {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 20px;
+    }
+
+    /* Table */
+    .admin-dashboard .table-card {
+      margin-top: 18px;
+    }
+
+    .admin-dashboard .tablewrap {
+      overflow: auto;
+      border: 1px solid #e7edf4;
+      border-radius: 11px;
+    }
+
+    .admin-dashboard table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-dashboard th {
+      padding: 11px 13px;
+      background: #f8fafc;
+      color: #667085;
+      text-align: left;
+      font-size: 10px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+
+    .admin-dashboard td {
+      padding: 12px 13px;
+      border-top: 1px solid #f0f2f5;
+      color: #475467;
+      font-size: 11px;
+    }
+
+    .admin-dashboard tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    /* Responsive */
+    @media(max-width:1050px) {
+      .admin-dashboard .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .admin-dashboard .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-dashboard .quick-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media(max-width:700px) {
+      .admin-dashboard .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .admin-dashboard .attendance-box {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-dashboard .status-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .admin-dashboard .quick-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .admin-dashboard .date-chip {
+        display: none;
+      }
+
+      .admin-dashboard .leave-row {
+        grid-template-columns: 1fr auto;
+      }
+
+      .admin-dashboard .leave-type,
+      .admin-dashboard .leave-date {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="portal-page admin-dashboard">
+
+<div class="app-layout">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar">
+
+    <img
+      class="sidebar-logo"
+      src="https://linnpoint.com/wp-content/uploads/2020/09/Final-LINNPOINT_LOGO-033.webp"
+      alt="Linn Point"
+    >
+
+    <nav class="nav">
+
+      <a class="active" href="/admin.html">
+        📊 <span>Dashboard</span>
+      </a>
+
+      <a href="/admin-employees.html">
+        👥 <span>Employees</span>
+      </a>
+
+      <a href="/admin-work-report.html">
+        📝 <span>Work Reports</span>
+      </a>
+
+      <a href="/admin-leaves.html">
+        📅 <span>Leave Requests</span>
+      </a>
+
+      <a href="/admin-attendance.html">
+        🕒 <span>Attendance</span>
+      </a>
+
+      <a href="/admin-monthly.html">
+        📈 <span>Monthly Reports</span>
+      </a>
+
+      <a href="/admin-holidays.html">
+        🏖️ <span>Holidays & CL</span>
+      </a>
+
+    </nav>
+
+    <div class="side-bottom">
+
+      <div class="user-mini">
+        <strong>Administrator</strong>
+        <span>Attendance management</span>
+      </div>
+
+      <button
+        class="logout-link"
+        type="button"
+        onclick="logout()"
+      >
+        ↪ Logout
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN CONTENT ================= -->
+
+  <main class="content">
+
+    <div class="content-inner">
+
+      <!-- HEADER -->
+      <header class="page-head">
+
+        <div>
+
+          <button
+            class="mobile-menu"
+            type="button"
+            onclick="toggleSidebar()"
+          >
+            ☰
+          </button>
+
+          <span class="eyebrow">
+            LINN POINT · ADMIN PORTAL
+          </span>
+
+          <h1>Dashboard</h1>
+
+          <p class="muted">
+            Welcome back, Admin! Here's what's happening today.
+          </p>
+
+        </div>
+
+
+        <div class="head-right">
+
+          <div class="date-chip">
+            📅 <span id="todayDate">—</span>
+          </div>
+
+          <button
+            class="ghost"
+            type="button"
+            onclick="load()"
+          >
+            ↻ Refresh
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- ================= STAT CARDS ================= -->
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <small>Total Employees</small>
+          <strong id="empCount">—</strong>
+          <span class="stat-icon">👥</span>
+        </div>
+
+        <div class="stat-card green">
+          <small>Work Started Today</small>
+          <strong id="started">—</strong>
+          <span class="stat-icon">🟢</span>
+        </div>
+
+        <div class="stat-card orange">
+          <small>Not Started Today</small>
+          <strong id="remaining">—</strong>
+          <span class="stat-icon">⏳</span>
+        </div>
+
+        <div class="stat-card red">
+          <small>On Leave Today</small>
+          <strong id="onLeave">—</strong>
+          <span class="stat-icon">📅</span>
+        </div>
+
+      </section>
+
+
+      <!-- ================= ATTENDANCE + LEAVES ================= -->
+
+      <section class="dashboard-grid">
+
+
+        <!-- Attendance -->
+        <div class="dashboard-card">
+
+          <div class="section-head">
+
+            <div>
+              <h2>Today's Attendance</h2>
+
+              <p>
+                Current employee attendance status.
+              </p>
+            </div>
+
+            <a
+              class="view-link"
+              href="/admin-attendance.html"
+            >
+              View All
+            </a>
+
+          </div>
+
+
+          <div class="attendance-box">
+
+            <div class="donut">
+
+              <div class="donut-content">
+
+                <strong id="percent">0%</strong>
+
+                <span>
+                  Present
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="legend">
+
+              <div class="legend-row">
+
+                <span>
+                  <i class="dot dot-present"></i>
+                  Present
+                </span>
+
+                <strong id="presentN">0</strong>
+
+              </div>
+
+
+              <div class="legend-row">
+
+                <span>
+                  <i class="dot dot-absent"></i>
+                  Absent
+                </span>
+
+                <strong id="absentN">0</strong>
+
+              </div>
+
+
+              <div class="legend-row">
+
+                <span>
+                  <i class="dot dot-leave"></i>
+                  On Leave
+                </span>
+
+                <strong id="leaveN">0</strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Leave Requests -->
+
+        <div class="dashboard-card">
+
+          <div class="section-head">
+
+            <div>
+
+              <h2>
+                Recent Leave Requests
+              </h2>
+
+              <p>
+                Latest employee requests.
+              </p>
+
+            </div>
+
+            <a
+              class="view-link"
+              href="/admin-leaves.html"
+            >
+              View All
+            </a>
+
+          </div>
+
+
+          <div
+            id="leaveList"
+            class="leave-list"
+          ></div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= EMPLOYEE STATUS ================= -->
+
+      <section class="dashboard-card">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2>
+              Today's Employee Status
+            </h2>
+
+            <p>
+              Quick overview of today's workforce.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="status-grid">
+
+          <div class="status-box status-present">
+
+            <strong id="statusPresent">
+              0
+            </strong>
+
+            <span>
+              Present
+            </span>
+
+          </div>
+
+
+          <div class="status-box status-absent">
+
+            <strong id="statusAbsent">
+              0
+            </strong>
+
+            <span>
+              Absent
+            </span>
+
+          </div>
+
+
+          <div class="status-box status-leave">
+
+            <strong id="statusLeave">
+              0
+            </strong>
+
+            <span>
+              On Leave
+            </span>
+
+          </div>
+
+
+          <div class="status-box status-not">
+
+            <strong id="statusNot">
+              0
+            </strong>
+
+            <span>
+              Not Started
+            </span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= QUICK ACTIONS ================= -->
+
+      <section
+        class="dashboard-card"
+        style="margin-top:18px"
+      >
+
+        <div class="section-head">
+
+          <div>
+
+            <h2>
+              Quick Actions
+            </h2>
+
+            <p>
+              Open the management section you need.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="quick-grid">
+
+          <a
+            class="quick-action"
+            href="/admin-employees.html"
+          >
+            <span>👥</span>
+            Employees
+          </a>
+
+
+          <a
+            class="quick-action"
+            href="/admin-attendance.html"
+          >
+            <span>🕒</span>
+            Attendance
+          </a>
+
+
+          <a
+            class="quick-action"
+            href="/admin-leaves.html"
+          >
+            <span>📅</span>
+            Leave Requests
+          </a>
+
+
+          <a
+            class="quick-action"
+            href="/admin-work-report.html"
+          >
+            <span>📝</span>
+            Work Reports
+          </a>
+
+
+          <a
+            class="quick-action"
+            href="/admin-monthly.html"
+          >
+            <span>📈</span>
+            Monthly Reports
+          </a>
+
+
+          <a
+            class="quick-action"
+            href="/admin-holidays.html"
+          >
+            <span>🏖️</span>
+            Holidays & CL
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= NOT STARTED ================= -->
+
+      <section
+        class="dashboard-card table-card"
+      >
+
+        <div class="section-head">
+
+          <div>
+
+            <h2>
+              Not Started Today
+            </h2>
+
+            <p>
+              Employees who have not checked in and are not on approved leave.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="notStarted"
+          class="tablewrap"
+        ></div>
+
+      </section>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="/common.js"></script>
+
+<script>
+
+if (!token || role !== 'admin') {
+  location.href = '/';
+}
+
+
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+}
+
+
+function esc(value) {
+
+  return String(value ?? '')
+    .replace(
+      /[&<>"']/g,
+      function (m) {
+
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+
+        }[m];
+
+      }
+    );
+
+}
+
+
+function badge(status) {
+
+  if (status === 'approved') {
+
+    return '<span class="badge done">Approved</span>';
+
+  }
+
+  if (status === 'rejected') {
+
+    return '<span class="badge danger">Rejected</span>';
+
+  }
+
+  return '<span class="badge pending">Pending</span>';
+
+}
+
+
+async function load() {
+
+  try {
+
+    const d = await api('/admin/dashboard');
+
+
+    const total =
+      Number(d.stats.total_employees || 0);
+
+    const startedN =
+      Number(d.stats.work_started || 0);
+
+    const notN =
+      Number(d.stats.remaining || 0);
+
+    const leaveCount =
+      Number(d.stats.on_leave || 0);
+
+
+    /*
+      Present = employees who started work
+      minus employees currently counted as leave.
+    */
+
+    const present =
+      Math.max(
+        0,
+        startedN - leaveCount
+      );
+
+
+    const absent =
+      Math.max(
+        0,
+        total - present - leaveCount - notN
+      );
+
+
+    const percent =
+      total
+        ? Math.round(
+            (present / total) * 100
+          )
+        : 0;
+
+
+    /* Top cards */
+
+    empCount.textContent = total;
+
+    started.textContent = startedN;
+
+    remaining.textContent = notN;
+
+    onLeave.textContent = leaveCount;
+
+
+    /* Date */
+
+    todayDate.textContent =
+      new Date().toLocaleDateString(
+        undefined,
+        {
+          weekday: 'short',
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }
+      );
+
+
+    /* Attendance */
+
+    presentN.textContent = present;
+
+    absentN.textContent = absent;
+
+    leaveN.textContent = leaveCount;
+
+    percent.textContent =
+      percent + '%';
+
+
+    /* Status */
+
+    statusPresent.textContent =
+      present;
+
+    statusAbsent.textContent =
+      absent;
+
+    statusLeave.textContent =
+      leaveCount;
+
+    statusNot.textContent =
+      notN;
+
+
+    /*
+      Update donut dynamically
+    */
+
+    const donut =
+      document.querySelector('.donut');
+
+    if (donut) {
+
+      const presentPercent =
+        total
+          ? (present / total) * 100
+          : 0;
+
+      const absentPercent =
+        total
+          ? (absent / total) * 100
+          : 0;
+
+      donut.style.background =
+        `conic-gradient(
+          #16a34a 0 ${presentPercent}%,
+          #ef4444 ${presentPercent}% ${presentPercent + absentPercent}%,
+          #f59e0b ${presentPercent + absentPercent}% 100%
+        )`;
+
+    }
+
+
+    /* Recent leaves */
+
+    const leaves =
+      (d.pending_leaves || [])
+        .slice(0, 5);
+
+
+    if (!leaves.length) {
+
+      leaveList.innerHTML =
+        '<div class="empty">No recent leave requests.</div>';
+
+    } else {
+
+      leaveList.innerHTML =
+        leaves.map(function (l) {
+
+          return `
+            <div class="leave-row">
+
+              <span class="leave-name">
+                ${esc(l.employee_name)}
+              </span>
+
+              <span class="leave-type">
+                ${esc(
+                  l.leave_type ||
+                  l.type ||
+                  'Leave'
+                )}
+              </span>
+
+              <span class="leave-date">
+                ${esc(
+                  l.start_date ||
+                  l.date ||
+                  '—'
+                )}
+              </span>
+
+              ${badge(l.status)}
+
+            </div>
+          `;
+
+        }).join('');
+
+    }
+
+
+    /* Not started */
+
+    if (
+      !d.not_started_employees ||
+      !d.not_started_employees.length
+    ) {
+
+      notStarted.innerHTML =
+        '<div class="empty">Everyone has started work or is on approved leave today.</div>';
+
+    } else {
+
+      notStarted.innerHTML = `
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${d.not_started_employees.map(function (e) {
+
+              return `
+
+                <tr>
+
+                  <td>
+                    <strong>
+                      ${esc(e.name)}
+                    </strong>
+                  </td>
+
+                  <td>
+                    ${esc(e.email)}
+                  </td>
+
+                  <td>
+                    ${esc(e.phone) || '—'}
+                  </td>
+
+                  <td>
+                    <span class="badge notstarted">
+                      Not Started
+                    </span>
+                  </td>
+
+                </tr>
+
+              `;
+
+            }).join('')}
+
+          </tbody>
+
+        </table>
+
+      `;
+
+    }
+
+
+  } catch (e) {
+
+    console.error(e);
+
+    alert(e.message);
+
+  }
+
+}
+
+
+load();
+
+setInterval(
+  load,
+  30000
+);
+
+</script>
+
+</body>
+</html>

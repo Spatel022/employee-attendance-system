@@ -38,7 +38,7 @@ function fmtM(n){n=Number(n)||0;return `${Math.floor(n/60)}h ${n%60}m`}
 function initials(n){return String(n||'').split(/\s+/).filter(Boolean).map(x=>x[0]).slice(0,2).join('').toUpperCase()}
 function daysInMonth(y,m){return new Date(y,m,0).getDate()}
 function dateKey(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
-async function init(){try{const d=await api('/admin/dashboard');employees=d.employees||[];employeeEl.innerHTML='<option value="">All employees</option>'+employees.map(e=>`<option value="${e.id}">${esc(e.name)} · ${esc(e.email)}</option>`).join('');await loadReport()}catch(e){alert(e.message)}}
+async function init(){try{const d=await api('/admin/dashboard');employees=d.employees||[];employeeEl.innerHTML='<option value="">All employees</option>'+employees.map(e => `<option value="${e.id}">${esc(e.name)}</option>`).join('');await loadReport()}catch(e){alert(e.message)}}
 async function loadReport(){
 try{
 const qs=`month=${encodeURIComponent(monthEl.value)}${employeeEl.value?'&employee_id='+encodeURIComponent(employeeEl.value):''}`;

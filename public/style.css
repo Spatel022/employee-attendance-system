@@ -717,3 +717,130 @@ select:focus{
     font-size:14px
   }
 }
+
+
+/* ===== Linn Point UI/UX Refresh v2 ===== */
+:root{
+  --primary:#2563eb;
+  --primary2:#1d4ed8;
+  --soft:#eff6ff;
+  --bg:#f5f7fb;
+  --panel:#ffffff;
+  --line:#e6eaf0;
+  --text:#111827;
+  --muted:#667085;
+  --sidebar:#0b1220;
+  --sidebar2:#13213b;
+  --shadow:0 8px 30px rgba(15,23,42,.06);
+}
+body{background:var(--bg);color:var(--text)}
+.app-layout{min-height:100vh}
+.sidebar{
+  width:252px;
+  padding:20px 14px;
+  background:linear-gradient(180deg,#0b1220 0%,#101b31 58%,#13213b 100%);
+  box-shadow:8px 0 28px rgba(15,23,42,.08);
+}
+.sidebar-logo{filter:brightness(0) invert(1);opacity:.98}
+.nav{gap:4px;margin-top:8px}
+.nav a{
+  min-height:44px;
+  padding:11px 13px;
+  border:1px solid transparent;
+  border-radius:12px;
+  transition:all .18s ease;
+}
+.nav a:hover{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.06);transform:none}
+.nav a.active{
+  background:linear-gradient(90deg,rgba(37,99,235,.24),rgba(37,99,235,.08));
+  border-color:rgba(96,165,250,.18);
+  color:#fff;
+  box-shadow:inset 3px 0 0 #60a5fa;
+}
+.side-bottom{padding-top:18px}
+.user-mini{background:rgba(255,255,255,.035)}
+.content{
+  padding:30px 34px 56px;
+  background:var(--bg);
+}
+.content-inner{max-width:1450px}
+.page-head{
+  min-height:68px;
+  margin-bottom:22px;
+}
+.page-head h1{
+  font-size:28px;
+  letter-spacing:-.8px;
+  font-weight:800;
+}
+.page-head .eyebrow{color:#64748b}
+.card,.stat{
+  border:1px solid #e8ebf0;
+  box-shadow:0 7px 25px rgba(15,23,42,.045);
+}
+.card{
+  padding:22px;
+  border-radius:16px;
+}
+.stat{
+  min-height:122px;
+  padding:20px;
+  border-radius:16px;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.stat:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(15,23,42,.08)}
+.stat strong{font-size:30px;font-weight:800}
+.stat .icon{
+  width:38px;height:38px;display:grid;place-items:center;
+  border-radius:11px;background:#eff6ff;
+}
+.stat:after{display:none}
+.section-head h2{font-size:16px;font-weight:800}
+.tablewrap{
+  border-radius:13px;
+  box-shadow:0 1px 2px rgba(16,24,40,.02);
+}
+table{min-width:850px}
+th{
+  background:#f8fafc;
+  color:#667085;
+  padding:12px 14px;
+}
+td{padding:14px}
+tbody tr{transition:background .15s ease}
+tbody tr:hover{background:#f8fbff}
+button{
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(16,24,40,.08);
+}
+button:not(.ghost):hover{box-shadow:0 5px 14px rgba(37,99,235,.2)}
+button.ghost:hover{background:#f8fafc}
+input,select,textarea{
+  border-color:#d9dee7;
+  border-radius:10px;
+  transition:border-color .15s,box-shadow .15s;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#70a1ff;
+  box-shadow:0 0 0 4px rgba(37,99,235,.09);
+}
+.toolbar{
+  padding:3px 0;
+}
+.badge{padding:6px 10px}
+.modal-card,.edit-card{
+  border:1px solid #e7eaf0;
+  border-radius:20px;
+}
+.actions{gap:9px}
+.actions .button{text-decoration:none}
+.mobile-menu{border-radius:10px!important}
+@media(max-width:760px){
+  .content{padding:18px 14px 35px}
+  .page-head{gap:12px}
+  .page-head h1{font-size:24px}
+  .card{padding:17px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{transition:none!important;scroll-behavior:auto!important}
+}

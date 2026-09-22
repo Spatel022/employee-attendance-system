@@ -844,3 +844,170 @@ input:focus,select:focus,textarea:focus{
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{transition:none!important;scroll-behavior:auto!important}
 }
+
+
+/* ===== Linn Point Portal UI Refresh v3 — Admin + Employee ===== */
+.portal-page .sidebar{
+  width:258px;
+  padding:18px 14px 14px;
+  background:linear-gradient(180deg,#07111f 0%,#0d1a2f 52%,#142746 100%);
+}
+.portal-page .sidebar-logo{
+  width:178px!important;
+  height:54px!important;
+  max-height:54px!important;
+  object-fit:contain!important;
+  filter:brightness(0) invert(1)!important;
+  background:transparent!important;
+  margin:2px auto 22px!important;
+  border-radius:0!important;
+}
+.portal-page .nav{
+  gap:6px;
+  margin-top:4px;
+}
+.portal-page .nav a{
+  min-height:46px;
+  padding:12px 14px;
+  border-radius:13px;
+  font-size:14px;
+  letter-spacing:.05px;
+}
+.portal-page .nav a.active{
+  background:linear-gradient(90deg,rgba(59,130,246,.30),rgba(37,99,235,.10));
+  border:1px solid rgba(96,165,250,.22);
+  box-shadow:inset 3px 0 #60a5fa,0 6px 18px rgba(0,0,0,.08);
+}
+.portal-page .user-mini{
+  background:rgba(255,255,255,.045);
+  border-color:rgba(255,255,255,.10);
+  padding:13px;
+}
+.portal-page .logout-link{
+  min-height:42px;
+  border-radius:11px;
+}
+.portal-page .content{
+  margin-left:258px;
+  width:calc(100% - 258px);
+  padding:32px 38px 60px;
+}
+.portal-page .content-inner{
+  max-width:1480px;
+}
+.portal-page .page-head{
+  margin-bottom:24px;
+}
+.portal-page .page-head h1{
+  font-size:30px;
+  line-height:1.15;
+  font-weight:850;
+  color:#0f172a;
+}
+.portal-page .page-head .eyebrow{
+  color:#2563eb;
+  font-weight:850;
+}
+.portal-page .stats{
+  gap:18px;
+  margin-bottom:22px;
+}
+.portal-page .stat{
+  min-height:128px;
+  padding:21px 22px;
+  border-radius:17px;
+  position:relative;
+}
+.portal-page .stat small{
+  font-size:12px;
+  color:#667085;
+  margin-bottom:9px;
+}
+.portal-page .stat strong{
+  font-size:31px;
+  color:#0f172a;
+}
+.portal-page .stat .icon{
+  width:40px;
+  height:40px;
+  right:18px;
+  top:17px;
+  border-radius:12px;
+  background:#eff6ff;
+}
+.portal-page .card{
+  padding:23px;
+  border-radius:17px;
+  margin-bottom:22px;
+}
+.portal-page .section-head{
+  margin-bottom:18px;
+}
+.portal-page .section-head h2{
+  font-size:17px;
+  font-weight:850;
+  color:#101828;
+}
+.portal-page .section-head p{
+  color:#667085;
+}
+.portal-page .tablewrap{
+  border-radius:13px;
+  border-color:#e5e9f0;
+}
+.portal-page th{
+  background:#f8fafc;
+  color:#667085;
+  font-size:10px;
+  letter-spacing:.7px;
+}
+.portal-page td{
+  padding:14px;
+}
+.portal-page tbody tr:hover{
+  background:#f5f9ff;
+}
+.portal-page input,
+.portal-page select,
+.portal-page textarea{
+  border-color:#d7dde7;
+  border-radius:11px;
+  background:#fff;
+}
+.portal-page button{
+  border-radius:11px;
+}
+.portal-page .actions{
+  gap:10px;
+}
+.portal-page .toolbar{
+  gap:12px;
+}
+.portal-page .empty{
+  border:1px dashed #dbe2ec;
+  border-radius:12px;
+  background:#fbfcfe;
+}
+.portal-page .holiday-note{
+  box-shadow:0 6px 18px rgba(154,52,18,.06);
+}
+@media(max-width:1050px){
+  .portal-page .content{
+    margin-left:258px;
+    width:calc(100% - 258px);
+    padding:26px 24px 50px;
+  }
+}
+@media(max-width:760px){
+  .portal-page .sidebar{
+    width:258px;
+  }
+  .portal-page .content{
+    margin-left:0;
+    width:100%;
+    padding:18px 14px 36px;
+  }
+  .portal-page .sidebar-logo{
+    width:160px!important;
+  }
+}

@@ -1648,3 +1648,19 @@ input:focus,select:focus,textarea:focus{
   .portal-page .toolbar{display:grid!important;grid-template-columns:1fr!important}
   .portal-page .toolbar>div,.portal-page .toolbar .field{min-width:0!important;width:100%}
 }
+
+
+/* Logo fix — preserve the original Linn Point logo on both portals */
+.portal-page .sidebar-logo{
+  filter:none!important;
+  -webkit-filter:none!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  mix-blend-mode:normal!important;
+  opacity:1!important;
+  object-fit:contain!important;
+}
+.portal-page .sidebar-logo-wrap{
+  background:transparent!important;
+  box-shadow:none!important;
+}

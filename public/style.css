@@ -1011,3 +1011,106 @@ input:focus,select:focus,textarea:focus{
     width:160px!important;
   }
 }
+
+
+/* ===== Linn Point unified sidebar — Admin + Employee ===== */
+.portal-page .sidebar{
+  width:263px!important;
+  padding:18px 14px 12px!important;
+  background:#08182d!important;
+  box-shadow:none!important;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.portal-page .sidebar-logo{
+  width:180px!important;
+  height:54px!important;
+  max-height:54px!important;
+  object-fit:contain!important;
+  filter:brightness(0) invert(1)!important;
+  background:transparent!important;
+  margin:0 auto 28px!important;
+  border-radius:0!important;
+  opacity:1!important;
+}
+.portal-page .nav{
+  gap:5px!important;
+  margin-top:0!important;
+}
+.portal-page .nav a{
+  min-height:47px!important;
+  padding:0 16px!important;
+  border-radius:12px!important;
+  border:1px solid transparent!important;
+  color:#cbd5e1!important;
+  font-size:14px!important;
+  font-weight:750!important;
+  gap:12px!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+.portal-page .nav a:hover{
+  background:rgba(255,255,255,.055)!important;
+  border-color:rgba(255,255,255,.04)!important;
+  color:#fff!important;
+}
+.portal-page .nav a.active{
+  background:#122d56!important;
+  border:1px solid #214b82!important;
+  color:#fff!important;
+  box-shadow:inset 3px 0 #60a5fa!important;
+}
+.portal-page .side-bottom{
+  left:14px!important;
+  right:14px!important;
+  bottom:12px!important;
+  padding-top:0!important;
+}
+.portal-page .user-mini{
+  padding:14px!important;
+  min-height:70px;
+  margin-bottom:10px!important;
+  border:1px solid rgba(148,163,184,.18)!important;
+  border-radius:12px!important;
+  background:#132846!important;
+}
+.portal-page .user-mini strong{
+  font-size:15px!important;
+  font-weight:800!important;
+  color:#fff!important;
+}
+.portal-page .user-mini span{
+  font-size:11px!important;
+  color:#9fb0c8!important;
+  margin-top:3px!important;
+}
+.portal-page .logout-link{
+  width:100%!important;
+  min-height:43px!important;
+  padding:0 14px!important;
+  margin-top:0!important;
+  border:0!important;
+  border-radius:11px!important;
+  background:#203957!important;
+  color:#fff!important;
+  font-size:14px!important;
+  font-weight:800!important;
+  text-align:left!important;
+  box-shadow:none!important;
+}
+.portal-page .logout-link:hover{
+  background:#294668!important;
+  transform:none!important;
+}
+.portal-page .content{
+  margin-left:263px!important;
+  width:calc(100% - 263px)!important;
+}
+@media(max-width:760px){
+  .portal-page .sidebar{
+    width:263px!important;
+  }
+  .portal-page .content{
+    margin-left:0!important;
+    width:100%!important;
+  }
+}

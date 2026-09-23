@@ -7,419 +7,36 @@
   <link rel="stylesheet" href="/style.css">
 
   <style>
-    /* =========================================================
-       LINN POINT — ADMIN DASHBOARD
-       Reference-style UI
-       Existing API/functionality preserved
-       ========================================================= */
-
-    .admin-dashboard {
-      background: #f5f8fc;
-    }
-
-    .admin-dashboard .content {
-      background: #f5f8fc;
-    }
-
-    /* Header */
-    .admin-dashboard .page-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 22px;
-    }
-
-    .admin-dashboard .head-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .admin-dashboard .date-chip {
-      background: #fff;
-      border: 1px solid #e5eaf1;
-      border-radius: 10px;
-      padding: 10px 14px;
-      color: #475467;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    /* Top statistics */
-    .admin-dashboard .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .admin-dashboard .stat-card {
-      position: relative;
-      min-height: 92px;
-      padding: 17px 18px;
-      background: #fff;
-      border: 1px solid #e7edf4;
-      border-radius: 14px;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, .04);
-    }
-
-    .admin-dashboard .stat-card small {
-      display: block;
-      margin-bottom: 8px;
-      color: #667085;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .admin-dashboard .stat-card strong {
-      color: #0f172a;
-      font-size: 28px;
-      line-height: 1;
-    }
-
-    .admin-dashboard .stat-icon {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 35px;
-      height: 35px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: #eff6ff;
-    }
-
-    .admin-dashboard .green .stat-icon {
-      background: #ecfdf3;
-    }
-
-    .admin-dashboard .orange .stat-icon {
-      background: #fff7ed;
-    }
-
-    .admin-dashboard .red .stat-icon {
-      background: #fef2f2;
-    }
-
-    /* Main two-column section */
-    .admin-dashboard .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1.08fr .92fr;
-      gap: 18px;
-      margin-bottom: 18px;
-    }
-
-    .admin-dashboard .dashboard-card {
-      background: #fff;
-      border: 1px solid #e7edf4;
-      border-radius: 15px;
-      padding: 18px;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
-    }
-
-    .admin-dashboard .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-
-    .admin-dashboard .section-head h2 {
-      margin: 0 0 4px;
-      color: #101828;
-      font-size: 15px;
-    }
-
-    .admin-dashboard .section-head p {
-      margin: 0;
-      color: #98a2b3;
-      font-size: 11px;
-    }
-
-    .admin-dashboard .view-link {
-      color: #2563eb;
-      text-decoration: none;
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    /* Attendance donut */
-    .admin-dashboard .attendance-box {
-      display: grid;
-      grid-template-columns: 155px 1fr;
-      align-items: center;
-      gap: 25px;
-      min-height: 185px;
-    }
-
-    .admin-dashboard .donut {
-      width: 140px;
-      height: 140px;
-      margin: auto;
-      position: relative;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background:
-        conic-gradient(
-          #16a34a 0 75%,
-          #ef4444 75% 91%,
-          #f59e0b 91% 100%
-        );
-    }
-
-    .admin-dashboard .donut::after {
-      content: "";
-      position: absolute;
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .admin-dashboard .donut-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
-
-    .admin-dashboard .donut-content strong {
-      display: block;
-      color: #101828;
-      font-size: 24px;
-    }
-
-    .admin-dashboard .donut-content span {
-      color: #667085;
-      font-size: 10px;
-    }
-
-    .admin-dashboard .legend {
-      display: grid;
-      gap: 14px;
-    }
-
-    .admin-dashboard .legend-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #475467;
-      font-size: 12px;
-    }
-
-    .admin-dashboard .legend-row strong {
-      color: #101828;
-    }
-
-    .admin-dashboard .dot {
-      width: 9px;
-      height: 9px;
-      display: inline-block;
-      margin-right: 8px;
-      border-radius: 50%;
-    }
-
-    .admin-dashboard .dot-present {
-      background: #16a34a;
-    }
-
-    .admin-dashboard .dot-absent {
-      background: #ef4444;
-    }
-
-    .admin-dashboard .dot-leave {
-      background: #f59e0b;
-    }
-
-    /* Leave list */
-    .admin-dashboard .leave-list {
-      display: grid;
-    }
-
-    .admin-dashboard .leave-row {
-      display: grid;
-      grid-template-columns: 1fr auto auto auto;
-      gap: 10px;
-      align-items: center;
-      padding: 11px 7px;
-      border-bottom: 1px solid #f0f2f5;
-      font-size: 11px;
-    }
-
-    .admin-dashboard .leave-row:last-child {
-      border-bottom: 0;
-    }
-
-    .admin-dashboard .leave-name {
-      color: #344054;
-      font-weight: 800;
-    }
-
-    .admin-dashboard .leave-type,
-    .admin-dashboard .leave-date {
-      color: #667085;
-    }
-
-    /* Employee status */
-    .admin-dashboard .status-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .admin-dashboard .status-box {
-      padding: 13px 10px;
-      text-align: center;
-      border: 1px solid #edf0f4;
-      border-radius: 11px;
-      background: #f8fafc;
-    }
-
-    .admin-dashboard .status-box strong {
-      display: block;
-      margin-bottom: 3px;
-      color: #101828;
-      font-size: 20px;
-    }
-
-    .admin-dashboard .status-box span {
-      color: #667085;
-      font-size: 10px;
-    }
-
-    .admin-dashboard .status-present {
-      background: #ecfdf3;
-    }
-
-    .admin-dashboard .status-absent {
-      background: #fef2f2;
-    }
-
-    .admin-dashboard .status-leave {
-      background: #fff7ed;
-    }
-
-    .admin-dashboard .status-not {
-      background: #eff6ff;
-    }
-
-    /* Quick actions */
-    .admin-dashboard .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-    }
-
-    .admin-dashboard .quick-action {
-      display: block;
-      padding: 13px 10px;
-      border: 1px solid #e6ebf2;
-      border-radius: 11px;
-      background: #fff;
-      color: #344054;
-      text-align: center;
-      text-decoration: none;
-      font-size: 11px;
-      font-weight: 800;
-      transition: .2s ease;
-    }
-
-    .admin-dashboard .quick-action:hover {
-      border-color: #bfdbfe;
-      background: #f8fbff;
-      transform: translateY(-1px);
-    }
-
-    .admin-dashboard .quick-action span {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 20px;
-    }
-
-    /* Table */
-    .admin-dashboard .table-card {
-      margin-top: 18px;
-    }
-
-    .admin-dashboard .tablewrap {
-      overflow: auto;
-      border: 1px solid #e7edf4;
-      border-radius: 11px;
-    }
-
-    .admin-dashboard table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .admin-dashboard th {
-      padding: 11px 13px;
-      background: #f8fafc;
-      color: #667085;
-      text-align: left;
-      font-size: 10px;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-    }
-
-    .admin-dashboard td {
-      padding: 12px 13px;
-      border-top: 1px solid #f0f2f5;
-      color: #475467;
-      font-size: 11px;
-    }
-
-    .admin-dashboard tbody tr:hover {
-      background: #f8fbff;
-    }
-
-    /* Responsive */
-    @media(max-width:1050px) {
-      .admin-dashboard .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .admin-dashboard .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-dashboard .quick-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media(max-width:700px) {
-      .admin-dashboard .stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .admin-dashboard .attendance-box {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-dashboard .status-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .admin-dashboard .quick-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .admin-dashboard .date-chip {
-        display: none;
-      }
-
-      .admin-dashboard .leave-row {
-        grid-template-columns: 1fr auto;
-      }
-
-      .admin-dashboard .leave-type,
-      .admin-dashboard .leave-date {
-        display: none;
-      }
-    }
+    /* Linn Point Admin Dashboard — reference UI */
+    .admin-dashboard .content{background:#f5f8fc}
+    .admin-dashboard .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px}
+    .admin-dashboard .page-head h1{font-size:31px;line-height:1.1;margin:5px 0 7px;font-weight:850;letter-spacing:-.7px}
+    .admin-dashboard .head-right{display:flex;align-items:center;gap:10px}
+    .admin-dashboard .date-chip{background:#fff;border:1px solid #e5eaf1;border-radius:11px;padding:10px 14px;color:#475467;font-size:11px;font-weight:750}
+    .admin-dashboard .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+    .admin-dashboard .stat-card{position:relative;min-height:118px;padding:18px 19px;background:#fff;border:1px solid #e5eaf1;border-radius:15px;box-shadow:0 5px 18px rgba(15,23,42,.045)}
+    .admin-dashboard .stat-card small{display:block;margin-bottom:9px;color:#667085;font-size:11px;font-weight:750}
+    .admin-dashboard .stat-card strong{color:#0f172a;font-size:29px;line-height:1}
+    .admin-dashboard .stat-icon{position:absolute;top:15px;right:15px;width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#eff6ff}
+    .admin-dashboard .green .stat-icon{background:#ecfdf3}.admin-dashboard .orange .stat-icon{background:#fff7ed}.admin-dashboard .red .stat-icon{background:#fef2f2}
+    .admin-dashboard .dashboard-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-bottom:18px}
+    .admin-dashboard .dashboard-card{background:#fff;border:1px solid #e5eaf1;border-radius:15px;padding:20px;box-shadow:0 5px 18px rgba(15,23,42,.045)}
+    .admin-dashboard .section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+    .admin-dashboard .section-head h2{margin:0 0 4px;color:#101828;font-size:16px;font-weight:850}
+    .admin-dashboard .section-head p{margin:0;color:#98a2b3;font-size:11px}
+    .admin-dashboard .view-link{color:#2563eb;text-decoration:none;font-size:11px;font-weight:850}
+    .admin-dashboard .attendance-box{display:grid;grid-template-columns:170px 1fr;align-items:center;gap:25px;min-height:205px}
+    .admin-dashboard .donut{width:150px;height:150px;margin:auto;position:relative;display:grid;place-items:center;border-radius:50%;background:conic-gradient(#16a34a 0 75%,#ef4444 75% 91%,#f59e0b 91% 100%);box-shadow:0 0 0 8px #f8fafc}
+    .admin-dashboard .donut::after{content:"";position:absolute;width:102px;height:102px;border-radius:50%;background:#fff}
+    .admin-dashboard .donut-content{position:relative;z-index:2;text-align:center}.admin-dashboard .donut-content strong{display:block;color:#101828;font-size:25px}.admin-dashboard .donut-content span{color:#667085;font-size:10px}
+    .admin-dashboard .legend{display:grid;gap:15px}.admin-dashboard .legend-row{display:flex;justify-content:space-between;align-items:center;color:#475467;font-size:12px}.admin-dashboard .legend-row strong{color:#101828}
+    .admin-dashboard .dot{width:9px;height:9px;display:inline-block;margin-right:8px;border-radius:50%}.admin-dashboard .dot-present{background:#16a34a}.admin-dashboard .dot-absent{background:#ef4444}.admin-dashboard .dot-leave{background:#f59e0b}
+    .admin-dashboard .leave-list{display:grid}.admin-dashboard .leave-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:12px 7px;border-bottom:1px solid #f0f2f5;font-size:11px}.admin-dashboard .leave-row:last-child{border-bottom:0}.admin-dashboard .leave-name{color:#344054;font-weight:800}.admin-dashboard .leave-type,.admin-dashboard .leave-date{color:#667085}
+    .admin-dashboard .status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.admin-dashboard .status-box{padding:14px 10px;text-align:center;border:1px solid #edf0f4;border-radius:12px;background:#f8fafc}.admin-dashboard .status-box strong{display:block;margin-bottom:4px;color:#101828;font-size:21px}.admin-dashboard .status-box span{color:#667085;font-size:10px}.admin-dashboard .status-present{background:#ecfdf3}.admin-dashboard .status-absent{background:#fef2f2}.admin-dashboard .status-leave{background:#fff7ed}.admin-dashboard .status-not{background:#eff6ff}
+    .admin-dashboard .quick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.admin-dashboard .quick-action{display:flex;align-items:center;justify-content:flex-start;gap:9px;padding:13px 12px;border:1px solid #e6ebf2;border-radius:11px;background:#fff;color:#344054;text-decoration:none;font-size:10px;font-weight:800;transition:.2s}.admin-dashboard .quick-action:hover{border-color:#bfdbfe;background:#f8fbff;transform:translateY(-1px)}.admin-dashboard .quick-action span{font-size:18px}
+    .admin-dashboard .table-card{margin-top:18px}.admin-dashboard .tablewrap{overflow:auto;border:1px solid #e7edf4;border-radius:11px}.admin-dashboard table{width:100%;border-collapse:collapse}.admin-dashboard th{padding:11px 13px;background:#f8fafc;color:#667085;text-align:left;font-size:10px;letter-spacing:.6px;text-transform:uppercase}.admin-dashboard td{padding:12px 13px;border-top:1px solid #f0f2f5;color:#475467;font-size:11px}.admin-dashboard tbody tr:hover{background:#f8fbff}
+    @media(max-width:1050px){.admin-dashboard .stats{grid-template-columns:repeat(2,1fr)}.admin-dashboard .dashboard-grid{grid-template-columns:1fr}.admin-dashboard .quick-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:700px){.admin-dashboard .stats{grid-template-columns:1fr 1fr}.admin-dashboard .attendance-box{grid-template-columns:1fr}.admin-dashboard .status-grid{grid-template-columns:1fr 1fr}.admin-dashboard .quick-grid{grid-template-columns:1fr 1fr}.admin-dashboard .date-chip{display:none}.admin-dashboard .leave-row{grid-template-columns:1fr auto}.admin-dashboard .leave-type,.admin-dashboard .leave-date{display:none}}
   </style>
 </head>
 
@@ -511,10 +128,10 @@
             LINN POINT · ADMIN PORTAL
           </span>
 
-          <h1>Dashboard</h1>
+          <h1>Good Morning, Admin!</h1>
 
           <p class="muted">
-            Welcome back, Admin! Here's what's happening today.
+            Here's what's happening in your organization today.
           </p>
 
         </div>
@@ -668,7 +285,7 @@
             <div>
 
               <h2>
-                Recent Leave Requests
+                Recent Activity
               </h2>
 
               <p>
